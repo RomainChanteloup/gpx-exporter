@@ -1,13 +1,12 @@
-<div>
+<div class="gpx-exporter">
     <h2>GPX Exporter</h2>
     <input type="file" (change)="handleFileInputChange($event)">
     <div>
         <label>
           Path Color {{colorPickerPathColorValue}}
-          <input type="color" [(ngModel)]="colorPickerPathColorValue" />
+          <input class="input-color" type="color" [(ngModel)]="colorPickerPathColorValue" />
         </label>
     </div>
-
     <div>
         <label>
           Opacity {{opacityPathValue}}
@@ -15,9 +14,13 @@
         </label>
     </div>
 
-    <canvas #canvasEl width="400" height="400"></canvas>
+    <canvas #canvasEl width="500" height="500"></canvas>
+
+    <button (click)="regenerateCanvas()">
+        Regenerate Canvas
+    </button>
 
     <button (click)="saveCanvas()">
-        Save as png
+        Save as PNG
     </button>
 </div>

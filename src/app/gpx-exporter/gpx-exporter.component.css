@@ -1,4 +1,54 @@
-#canvas-container{
-    height: 200px;
-    width: 200px;
+.gpx-exporter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+}
+
+.gpx-exporter div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.gpx-exporter input[type='range'] {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.gpx-exporter canvas {
+  width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  max-width: 400px;
+}
+
+.gpx-exporter .input-color {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+.gpx-exporter button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.gpx-exporter button:hover {
+  background-color: #0056b3;
+}
+
+.gpx-exporter label {
+  margin: 5px;
 }

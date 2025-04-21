@@ -26,10 +26,10 @@ export class GpxExporterComponent {
       this.context = test
     }
   }
-    
-
+  
   handleFileInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
+    this.clearCanvas();
     if (input.files && input.files.length > 0) {
         const file = input.files[0];
         this.gpxExporterService.readGpxFile(file).then(() => {
@@ -44,6 +44,26 @@ export class GpxExporterComponent {
     }
   }
     
+  regenerateCanvas() {
+    this.clearCanvas();
+    this.canvas = this.gpxExporterService.generateCanvasFromGpx(
+      this.colorPickerPathColorValue,
+      this.opacityPathValue,
+      'white',
+      true
+    );
+    this.displayCanvas();
+  }
+
+
+  clearCanvas(){
+    if(this.canvasEl && this.canvasEl.nativeElement){
+      const canvas = this.canvasEl.nativeElement as HTMLCanvasElement;
+      this.context.clearRect(0, 0, canvas.width, canvas.height);
+      this.cdr.detectChanges();
+    }
+  }
+
   displayCanvas() {
     if(this.canvas){
       this.context.drawImage(this.canvas, 0, 0);

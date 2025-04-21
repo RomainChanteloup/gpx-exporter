@@ -34,98 +34,96 @@ export class GpxExporterService {
   }
 
   generateCanvasFromGpx(
-    trackColor: string = 'red', // Color of the track line
-    trackOpacity: number = 1.0, // Opacity of the track line (0.0 to 1.0)
-    backgroundColor: string = 'white', // Background color of the canvas
-    transparentBackground: boolean = false // Whether the background should be transparent
+    trackColor: string = 'red',
+    trackOpacity: number = 1.0,
+    backgroundColor: string = 'white',
+    transparentBackground: boolean = false
   ): HTMLCanvasElement | null {
-    console.log("Values ", trackColor, trackOpacity, backgroundColor, transparentBackground)
-
-    if (!this.gpxData || !this.gpxData.tracks || this.gpxData.tracks.length === 0) {
-      console.error('No GPX data available or no tracks found.');
+    if (!this.gpxData?.tracks?.length) {
+      console.error('No GPX data or tracks found.');
       return null;
     }
-
-    const track = this.gpxData.tracks[0]; // Assuming one track for simplicity
-    const points = track.points.map(point => ({ latitude: point.lat, longitude: point.lon }));
-
+  
+    const track = this.gpxData.tracks[0];
+    const points = track.points.map(p => ({ latitude: p.lat, longitude: p.lon }));
     if (points.length < 2) {
-      console.error('Not enough points to generate a canvas.');
+      console.error('Not enough points to draw a path.');
       return null;
     }
-
+  
     const bounds = geolib.getBounds(points);
-    const center = geolib.getCenter(points)
-    if (!center) {
-      console.error('No center calculated from points.');
-      return null;
-    }
-
-    const centerTyped = center as { longitude: number; latitude: number; };
-
     if (!bounds) {
-      console.error('Invalid bounds calculated from points.', bounds);
+      console.error('Invalid bounds.');
       return null;
     }
-
+  
     const canvasSize = 500;
-    // Calculate the maximum distance to determine the scale
-    const width = geolib.getPreciseDistance(
-      { latitude: centerTyped.latitude, longitude: bounds.minLng },
-      { latitude: centerTyped.latitude, longitude: bounds.maxLng }
+    const margin = 20;
+  
+    // Track size in meters
+    const trackWidth = geolib.getPreciseDistance(
+      { latitude: bounds.minLat, longitude: bounds.minLng },
+      { latitude: bounds.minLat, longitude: bounds.maxLng }
     );
-    const height = geolib.getPreciseDistance(
-      { latitude: bounds.minLat, longitude: centerTyped.longitude },
-      { latitude: bounds.maxLat, longitude: centerTyped.longitude }
+    const trackHeight = geolib.getPreciseDistance(
+      { latitude: bounds.minLat, longitude: bounds.minLng },
+      { latitude: bounds.maxLat, longitude: bounds.minLng }
     );
-    const maxDistance = Math.max(width, height);
-    const scale = canvasSize / maxDistance;
-
+  
+    const scaleX = (canvasSize - 2 * margin) / trackWidth;
+    const scaleY = (canvasSize - 2 * margin) / trackHeight;
+    const scale = Math.min(scaleX, scaleY);
+  
+    // Center offsets
+    const offsetX = (canvasSize - trackWidth * scale) / 2;
+    const offsetY = (canvasSize - trackHeight * scale) / 2;
+  
     const canvas = document.createElement('canvas');
     canvas.width = canvasSize;
     canvas.height = canvasSize;
     const ctx = canvas.getContext('2d');
-
+  
     if (!ctx) {
       console.error('Canvas context not available.');
       return null;
     }
-
-    if (transparentBackground) {
-      canvas.style.backgroundColor = 'transparent';
-    } else {
+  
+    if (!transparentBackground) {
       ctx.fillStyle = backgroundColor;
       ctx.fillRect(0, 0, canvasSize, canvasSize);
     }
-
+  
     ctx.strokeStyle = trackColor;
     ctx.lineWidth = 2;
     ctx.globalAlpha = trackOpacity;
     ctx.beginPath();
+  
     points.forEach((point, index) => {
-      const dx = geolib.getDistance(
-        { latitude: centerTyped.latitude, longitude: centerTyped.longitude },
-        { latitude: centerTyped.latitude, longitude: point.longitude }
-      ) * (point.longitude > centerTyped.longitude ? 1 : -1) * scale;
-    
-      const dy = geolib.getDistance(
-        { latitude: centerTyped.latitude, longitude: centerTyped.longitude },
-        { latitude: point.latitude, longitude: centerTyped.longitude }
-      ) * (point.latitude > centerTyped.latitude ? -1 : 1) * scale;
-    
-      const x = canvasSize / 2 + dx;
-      const y = canvasSize / 2 + dy;
-    
+      const xDist = geolib.getPreciseDistance(
+        { latitude: bounds.minLat, longitude: bounds.minLng },
+        { latitude: bounds.minLat, longitude: point.longitude }
+      );
+  
+      const yDist = geolib.getPreciseDistance(
+        { latitude: bounds.minLat, longitude: bounds.minLng },
+        { latitude: point.latitude, longitude: bounds.minLng }
+      );
+  
+      const x = offsetX + xDist * scale;
+      const y = canvasSize - (offsetY + yDist * scale); // Flip Y axis properly
+  
       if (index === 0) {
         ctx.moveTo(x, y);
       } else {
         ctx.lineTo(x, y);
       }
     });
+  
     ctx.stroke();
-
+  
     console.log('Canvas generated successfully.');
-    console.log(canvas)
     return canvas;
   }
+
+  
 }
