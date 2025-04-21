@@ -26,14 +26,11 @@ jobs:
       - name: Build project
         run: npm run build -- --configuration production
 
-      - name: Display build output
-        run: ls -R ./dist/myapp
-
       # Step 5: Upload static site files as artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3.0.1
         with:
-          path: ./dist/myapp
+          path: ./dist/browser  # Replace with the directory containing your build files
 
   # Deploy static files to GitHub Pages
   deploy:
