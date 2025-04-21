@@ -30,7 +30,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3.0.1
         with:
-          path: ./dist/browser  # Replace with the directory containing your build files
+          path: ./dist/myapp
 
   # Deploy static files to GitHub Pages
   deploy:
