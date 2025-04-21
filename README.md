@@ -1,5 +1,5 @@
 # Gpx Exporter ⚙
-A app to export gpx files to customizable PNG
+An app to export gpx files to customizable PNG
 ![image](https://github.com/user-attachments/assets/6bec607e-7a1c-401f-bd17-4afb6b1984ff)
 
 
