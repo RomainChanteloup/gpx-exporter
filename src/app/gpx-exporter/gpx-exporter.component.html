@@ -3,15 +3,21 @@
     <input type="file" (change)="handleFileInputChange($event)">
     <div>
         <label>
-          Path Color {{colorPickerValue}}
-          <input type="color" [(ngModel)]="colorPickerValue" />
+          Path Color {{colorPickerPathColorValue}}
+          <input type="color" [(ngModel)]="colorPickerPathColorValue" />
         </label>
     </div>
 
     <div>
         <label>
-          Opacity {{opacityValue}}
-          <input type="range" id="alphaSlider" min="0" max="1" step="0.01" [(ngModel)]="opacityValue" />
+          Opacity {{opacityPathValue}}
+          <input type="range" id="alphaSlider" min="0" max="1" step="0.01" [(ngModel)]="opacityPathValue" />
         </label>
     </div>
+
+    <canvas #canvasEl width="400" height="400"></canvas>
+
+    <button (click)="saveCanvas()">
+        Save as png
+    </button>
 </div>
