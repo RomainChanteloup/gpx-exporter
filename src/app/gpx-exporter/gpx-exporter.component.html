@@ -1,16 +1,44 @@
 <div class="gpx-exporter">
-    <h2>GPX Exporter</h2>
-    <input type="file" (change)="handleFileInputChange($event)">
+    <h1>GPX Exporter ⚙</h1>
+    <div class="file-upload-container">
+        <input type="file" id="fileInput" (change)="handleFileInputChange($event)" hidden>
+        <label for="fileInput" class="custom-file-upload">
+            <span>Choose File</span>
+        </label>
+
+        @if (selectedFileName) {
+            <span>{{ selectedFileName }}</span>
+        } @else {
+            <span>No file selected</span>
+        }
+    </div>
+
     <div>
         <label>
           Path Color {{colorPickerPathColorValue}}
-          <input class="input-color" type="color" [(ngModel)]="colorPickerPathColorValue" />
+        </label>
+    </div>
+    <div>
+        <input class="input-color" type="color" [(ngModel)]="colorPickerPathColorValue" (change)="regenerateCanvas()" />
+    </div>
+    <div>
+        <label>
+          Path Size {{pathWidthValue}}
+          <div class="slider-container">
+            <button type="button" (click)="decreasePathWidth()">-</button>
+            <input type="range" min="1" max="20" step="1" [(ngModel)]="pathWidthValue" (change)="regenerateCanvas()" />
+            <button type="button" (click)="increasePathWidth()">+</button>
+          </div>
         </label>
     </div>
     <div>
         <label>
           Opacity {{opacityPathValue}}
-          <input type="range" id="alphaSlider" min="0" max="1" step="0.01" [(ngModel)]="opacityPathValue" />
+          <div class="slider-container">
+            <button type="button" (click)="decreaseOpacity()">-</button>
+            <input type="range" id="alphaSlider" min="0" max="1" step="0.01" [(ngModel)]="opacityPathValue" (change)="regenerateCanvas()" />
+            <button type="button" (click)="increaseOpacity()">+</button>
+          </div>
         </label>
     </div>
 
