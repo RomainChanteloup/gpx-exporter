@@ -1,8 +1,6 @@
 # Gpx Exporter ⚙
 An app to export gpx files to customizable PNG
-![image](https://github.com/user-attachments/assets/783b7cd7-837f-48a2-8850-1c97030dd245)
-
-
+![image](https://github.com/user-attachments/assets/975af11d-ca1a-4fe9-8cd6-699df983ecf5)
 
 ## Technologies Used
 * Frontend: Angular
