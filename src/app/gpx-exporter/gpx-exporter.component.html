@@ -1,54 +1,64 @@
-<div class="gpx-exporter">
-    <h1>GPX Exporter ⚙</h1>
-    <div class="file-upload-container">
-        <input type="file" id="fileInput" (change)="handleFileInputChange($event)" hidden>
-        <label for="fileInput" class="custom-file-upload">
-            <span>Choose File</span>
+<div class="gpx-exporter flex flex-col items-center justify-center">
+    <h2 class="text-3xl py-8 font-bold">GPX Exporter ⚙</h2>
+    <input type="file" 
+        class="file-input file-input-md" 
+        (change)="handleFileInputChange($event)"
+    >
+    <div class="pt-4">
+        <label>
+        <span class="text-lg font-bold">Path Color : {{colorPickerPathColorValue}} </span>
+          <input class="input-color" type="color" 
+          [(ngModel)]="colorPickerPathColorValue"
+          (change)="regenerateCanvas()"
+           />
         </label>
+    </div>
 
-        @if (selectedFileName) {
-            <span>{{ selectedFileName }}</span>
-        } @else {
-            <span>No file selected</span>
-        }
-    </div>
-
-    <div>
+    <div class="flex flex-col items-center justify-center text-center py-4">
         <label>
-          Path Color {{colorPickerPathColorValue}}
-        </label>
-    </div>
-    <div>
-        <input class="input-color" type="color" [(ngModel)]="colorPickerPathColorValue" (change)="regenerateCanvas()" />
-    </div>
-    <div>
-        <label>
-          Path Size {{pathWidthValue}}
-          <div class="slider-container">
-            <button type="button" (click)="decreasePathWidth()">-</button>
-            <input type="range" min="1" max="20" step="1" [(ngModel)]="pathWidthValue" (change)="regenerateCanvas()" />
-            <button type="button" (click)="increasePathWidth()">+</button>
-          </div>
-        </label>
-    </div>
-    <div>
-        <label>
-          Opacity {{opacityPathValue}}
-          <div class="slider-container">
-            <button type="button" (click)="decreaseOpacity()">-</button>
-            <input type="range" id="alphaSlider" min="0" max="1" step="0.01" [(ngModel)]="opacityPathValue" (change)="regenerateCanvas()" />
-            <button type="button" (click)="increaseOpacity()">+</button>
+          <span class="text-lg font-bold">Path Size : {{pathWidthValue}}</span>
+          <div class="flex flex-row pt-2 items-center">
+            <button class="btn mr-4" type="button" (click)="decreasePathWidth()">-</button>
+            <input type="range" class="range w-2xs" min="1" max="20" step="1" [(ngModel)]="pathWidthValue" (change)="regenerateCanvas()" />
+            <button class="btn ml-4" type="button" (click)="increasePathWidth()">+</button>
           </div>
         </label>
     </div>
 
-    <canvas #canvasEl width="500" height="500"></canvas>
+    <div class="flex flex-col items-center justify-center text-center py-4">
+        <label class="text-lg font-bold pb-2">
+            <span>Opacity : </span>
+            <span>{{opacityPathValue}}</span>
+          <div class="flex flex-row pt-2 items-center">
+            <button class="btn mr-4" type="button" (click)="decreaseOpacity()">-</button>
+            <input class="range w-2xs" type="range" min="0" max="1" step="0.1" 
+            [(ngModel)]="opacityPathValue"
+             (change)="regenerateCanvas()" />
+            <button class="btn ml-4" type="button" (click)="increaseOpacity()">+</button>
+          </div>
+        </label>
+    </div>
 
-    <button (click)="regenerateCanvas()">
-        Regenerate Canvas
-    </button>
+    <div class="flex flex-col items-center justify-center rounded-xl border-1">
+        <div>
+            <canvas #canvasEl width="500" height="500"></canvas>
+        </div>
+    </div>
 
-    <button (click)="saveCanvas()">
-        Save as PNG
-    </button>
+    <div class="flex flex-row py-4 gap-4">
+        <button class="btn" (click)="regenerateCanvas()">
+            <span class="material-symbols-outlined">
+                refresh
+                </span>
+            Regenerate Canvas
+        </button>
+
+        <button class="btn" (click)="saveCanvas()">
+            <span class="material-symbols-outlined">
+                download
+            </span>
+            Save as PNG
+        </button>
+    </div>
+
 </div>

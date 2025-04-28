@@ -24,7 +24,7 @@ export class GpxExporterComponent {
   pathWidthValue = 2; // Track line width
   maxPathWidth = 20;
   minPathWidth = 1;
-  opacityStep = 0.01;
+  opacityStep = 0.1;
   minOpacity = 0;
   maxOpacity = 1;
   selectedFile: File | null = null;
@@ -138,7 +138,7 @@ export class GpxExporterComponent {
     if (this.opacityPathValue < this.maxOpacity) {
       this.opacityPathValue = Math.min(
         this.maxOpacity,
-        +(this.opacityPathValue + this.opacityStep).toFixed(2)
+        +(this.opacityPathValue + this.opacityStep).toFixed(1)
       );
       this.regenerateCanvas();
     }
@@ -148,7 +148,7 @@ export class GpxExporterComponent {
     if (this.opacityPathValue > this.minOpacity) {
       this.opacityPathValue = Math.max(
         this.minOpacity,
-        +(this.opacityPathValue - this.opacityStep).toFixed(2)
+        +(this.opacityPathValue - this.opacityStep).toFixed(1)
       );
       this.regenerateCanvas();
     }
